@@ -39,11 +39,35 @@ configuration for Spring container by:
 2. setter injection
 
 ---
-![ioc exa](/Users/lizicheng/Desktop/java/spring/notes/ioc-de.png)  
-![ioc exa](/Users/lizicheng/Desktop/java/spring/notes/ioc-ex.png)   
+
+[//]: # (![ioc exa]&#40;/Users/lizicheng/Desktop/java/spring/notes/ioc-de.png&#41;  )
+
+[//]: # (![ioc exa]&#40;/Users/lizicheng/Desktop/java/spring/notes/ioc-ex.png&#41;   )
 
 `@Componment` is a SpringBean  
 `@Autowired` Spring look for a class that match, by type: class or interface  
+`no usages` because Spring do the work behind  
+### behind the scenes  
+Help you automatically new objects  
+### Setter injection  
+use the autowried for setter methods
+
+---
+component scanning: scanning the same packages  
+explicitly scanning: scanBasePackages={"www.luv.com"}  
+
+---
+for multiple beans, we can use `@Qualified`  
+`@Qualifier("baseballCoach")` the bean id is the first letter is lowercase, the same as the class name  
+We can use `@Primary` on the class name.
+`@Qualifier` has higher priority than `@Primary` 
+
+---
+By default, all beans are initialized, every class will be newed.  
+### lazy initialization  
+
+
+
 
 
 
