@@ -39,8 +39,8 @@ configuration for Spring container by:
 2. setter injection
 
 ---
-[//]: # (![ioc exa]&#40;/Users/lizicheng/Desktop/java/spring/notes/ioc-de.png&#41;  )
-[//]: # (![ioc exa]&#40;/Users/lizicheng/Desktop/java/spring/notes/ioc-ex.png&#41;   )
+![ioc exa](/Users/lizicheng/Desktop/java/spring/notes/ioc-de.png)  
+![ioc exa](/Users/lizicheng/Desktop/java/spring/notes/ioc-ex.png)   
 
 `@Componment` is a SpringBean  
 `@Autowired` Spring look for a class that match, by type: class or interface  
