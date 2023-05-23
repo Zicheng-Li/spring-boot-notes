@@ -65,6 +65,41 @@ We can use `@Primary` on the class name.
 ---
 By default, all beans are initialized, every class will be newed.  
 ### lazy initialization  
+only when the class is needed, created it. We can use `@Lazy`  
+global configuration: `spring.main.lazy-initialization=ture`  
+### beans scope
+the lifecycle of bean  
+how many objects are created  
+how long the bean lives  
+The default bean is singleton  
+Explicit bean scope: `@Scope` use this at the class file
+* protottpe scope: `@Scope socpe_prototype` 
+* request
+* session
+* global-session  
+
+`@Scope(ConfigurableBeanFactory.SCOPE_PROTOTYPE)`  
+`@GetMapping("/check")
+public String check() {
+return "Compare the two coaches: coach == anothercoach, " + (myCoach==anotherCoach);
+}`  
+### lifecycle of bean
+Bean lifecycle method  
+`@PostConstruct` once Spring started running  
+`@PreDestroy` once Spring finished running  
+**For "prototype" scoped beans, Spring does not call the destroy method. Gasp!**  
+**Prototype beans are lazy by default. There is no need to use the @Lazy annotation for prototype scopes beans.**    
+
+In contrast to the other scopes, Spring does not manage the complete lifecycle of a prototype bean: the container instantiates, configures, and otherwise assembles a prototype object, and hands it to the client, with no further record of that prototype instance.
+
+Thus, although initialization lifecycle callback methods are called on all objects regardless of scope, in the case of prototypes, configured destruction lifecycle callbacks are not called. The client code must clean up prototype-scoped objects and release expensive resources that the prototype bean(s) are holding.  
+
+### configuration for beans  
+used `@Beans` because sometimes have no access to the thrid party source code, but need to make that class available for the bean  
+Example: AWS S3 cloud, we want to communicate our app with the S3 service.  
+The bean id is default to the method name. `public Coach swimCoach()` change the id of bean `@Bean("badname")`
+
+
 
 
 
