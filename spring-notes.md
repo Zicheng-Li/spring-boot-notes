@@ -97,7 +97,30 @@ Thus, although initialization lifecycle callback methods are called on all objec
 ### configuration for beans  
 used `@Beans` because sometimes have no access to the thrid party source code, but need to make that class available for the bean  
 Example: AWS S3 cloud, we want to communicate our app with the S3 service.  
-The bean id is default to the method name. `public Coach swimCoach()` change the id of bean `@Bean("badname")`
+The bean id is default to the method name. `public Coach swimCoach()` change the id of bean `@Bean("badname")`  
+
+# 03
+
+### Hibernate & JPA  
+Hibernate is a framework that persisting the Java objects in the database.  
+* handle low level sql operations
+* provide Object-to-Relational Mapping
+
+It can map the Java code to sql create table  
+JPA: Jakarta Persistence API, it is a specification  
+JPA allow us to do sql jobs using only Java. JPA is another abstract layer on top of JDBC. `EntityManager`  
+We can use commandlineRunner to execute: `return runner -> {
+System.out.println("Hello World!");
+}`  
+you can set up the connection to database: `spring.datasource.url=jdbc:mysql://localhost:3306/student_tracker`  
+`Entity Classes` is a java class that maps the database table. Annotations `@Entity`. The class must have public or protected constructor.  
+`@Column`, `@Table` is optional, but recommended. The default name of the table and column will be the same as the class name.  
+`GenerationType.AUTO`, `GenerationType.IDENTITY`, `GenerationType.SEQUENCE`, `GenerationType.TABLE` 
+### Bonus: 
+you can define your own custom generation strategy.  
+`Project Lombok`
+
+
 
 
 
