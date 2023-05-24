@@ -118,7 +118,26 @@ you can set up the connection to database: `spring.datasource.url=jdbc:mysql://l
 `GenerationType.AUTO`, `GenerationType.IDENTITY`, `GenerationType.SEQUENCE`, `GenerationType.TABLE` 
 ### Bonus: 
 you can define your own custom generation strategy.  
-`Project Lombok`
+`Project Lombok` 
+### CRUD  
+Create, read,update and delete  
+DAO: Date Access Object, kind of like a helper class for communicate with the database  
+Steps: 
+1. Define DAO interface
+2. Define DAO implementation, inject the entity manager
+3. update main app  
+
+saving a java object
+handled transaction management: `@Transactional`, for DAO: `@Repository` just like `@Component`  
+
+The difference between beans and components:  
+1. @Component is a class-level annotation, but @Bean is at the method level, so @Component is only an option when a class's source code is editable. @Bean can always be used, but it's more verbose.  
+2. @Component is compatible with Spring's auto-detection, but @Bean requires manual class instantiation.  
+3. Using @Bean, decouples the instantiation of the bean from its class definition. This is why we can use it to make third-party classes into Spring beans. It also means we can introduce logic to decide which of several possible instance options for a bean to use.
+
+creating a new method `private void createStudent(StudentDAO studentDAO)` then `studentDAO.save(tempStudent);`, inside the DAOimplement `public void save(Student theStudent) {
+entityManager.persist(theStudent);
+}`
 
 
 
