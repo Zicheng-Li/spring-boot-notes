@@ -143,14 +143,104 @@ we can test multiple students in Java.
 we can change the index of MySQL `ALTER TABLE student_tracker.student AUTO_INCREMENT=1000`  
 we can also TRUNCATE the index of MySQL `TRUNCATE student_tracker.student`  
 ### retrieve objects
+we don't need to add `@Transactional` because we just retrieved the objects, no modification.
 use:`@Override
 public Student findById(Integer id) {
 return entityManager.find(Student.class, id);
 }`  
+Steps:
+1. Define DAO interface
+2. Define DAO implementation, inject the entity manager
+3. update main app
 ## !important  
 `public Student() {
     }`  
-In JPA and some beans, we have to have a default constructor, otherwise it will throw an exception.
+In JPA and some beans, we have to have a default constructor, otherwise it will throw an exception.  
+`Student myStudent = studentDAO.findById(theId);`  
+### query objects
+JPA have its query language called JPQL, based on the entity name and entity field name  
+we can first create a query object using TypedQuery  
+`TypedQuery<Student> query = entityManager.createQuery("FROM Student order by lastName desc", Student.class);`  
+inside the query, we can say order by lastName desc.  
+Then we can return the query  
+`return query.getResultList();`  
+we can also have a method:  
+`private void queryStudent(StudentDAO studentDAO) {
+List<Student> students = studentDAO.findAll();
+        for (Student student : students) {
+            System.out.println(student);
+        }
+	}`  
+**note that all name in the query is entity field name, not the real column name or table name in MySQL.** e.g. lastName  
+JPQL named parameters are prefixed with a colon, think of that as the placeholder, `:lastName`  
+the code: 
+``` 
+public List<Student> findByLastName(String thelastName) {
+        // create query
+        TypedQuery<Student> query = entityManager.createQuery("FROM Student where lastName = :lastName order by lastName desc", Student.class);
+
+        // set parameter
+        query.setParameter("lastName", thelastName);
+
+        // return query results
+        return query.getResultList();
+    }
+   private void queryStudentByLastname(StudentDAO studentDAO) {
+		// get a list of all students
+		List<Student> students = studentDAO.findByLastName("jin");
+
+		//display all students
+		for (Student student : students) {
+            System.out.println(student);
+        }
+	}
+```
+### update object
+ we need to add `@Transactional` 
+code:
+```
+public void update(Student theStudent) {
+        entityManager.merge(theStudent);
+    }
+    
+    private void updateStudent(StudentDAO studentDAO) {
+		int id=1;
+		System.out.println("Retrieving student with id: " + id);
+		Student student = studentDAO.findById(id);
+
+		student.setFirstName("Scooby");
+        System.out.println("Updating student with id: " + id);
+		studentDAO.update(student);
+		System.out.println("Updated student: " + student);
+	}
+```  
+### delete object
+code:
+```
+@Transactional
+    public int deleteAll() {
+        int numberOfRows = entityManager.createQuery("DELETE FROM Student").executeUpdate();
+        return numberOfRows;
+    }
+    private void deleteAllStudent(StudentDAO studentDAO) {
+		System.out.println("Deleting all students");
+		int count=studentDAO.deleteAll();
+		System.out.println("Deleted "+count+" rows students");
+	}
+```  
+### create table using Java
+inside the property file:  
+PROPERTY-VALUE  
+1. none
+2. create-onlu
+3. **create** this will first drop table if existed, then create table. Don't recommend for company use because it will lose any previous data.
+4. drop
+5. create-drop
+6. validate
+7. **update** it will keep the existing data
+
+Be caution with update model. it will keep updated the table with latest code.
+
 
 
 
