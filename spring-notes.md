@@ -137,7 +137,22 @@ The difference between beans and components:
 
 creating a new method `private void createStudent(StudentDAO studentDAO)` then `studentDAO.save(tempStudent);`, inside the DAOimplement `public void save(Student theStudent) {
 entityManager.persist(theStudent);
-}`
+}`  
+### save multiple students
+we can test multiple students in Java.  
+we can change the index of MySQL `ALTER TABLE student_tracker.student AUTO_INCREMENT=1000`  
+we can also TRUNCATE the index of MySQL `TRUNCATE student_tracker.student`  
+### retrieve objects
+use:`@Override
+public Student findById(Integer id) {
+return entityManager.find(Student.class, id);
+}`  
+## !important  
+`public Student() {
+    }`  
+In JPA and some beans, we have to have a default constructor, otherwise it will throw an exception.
+
+
 
 
 
