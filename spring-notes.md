@@ -239,7 +239,48 @@ PROPERTY-VALUE
 6. validate
 7. **update** it will keep the existing data
 
-Be caution with update model. it will keep updated the table with latest code.
+Be caution with update model. it will keep updated the table with latest code.  
+### REST API 
+business problems: we want to create an app provides the weather report for a city  
+Application architecture: my weather app will pass a `string` city name to the external service to give the data.  
+we can make REST API calls over HTTP in order to connect to the service. REST is independent to language, the client can use any language, and service can use any language.  
+REST can use any data format. XML, JSON  
+use the online weather service API provided by [API](https://www.openweathermap.org) we can read the API documentation. 
+REST calls can be made over HTTP  
+We will create a CRM service.  
+JavaScript Object Notation: JSON  
+The left part of the pair, is always double quotes, nested JSON objects, JSON arrays: use `["","","","","","]`  
+### REST HTTP
+`POST` : create an entity  
+`GET` : read a list of entities  
+`PUT` : Update an entity  
+`DELETE` : delete an entity 
+Request message: request line, Header, Body
+Response message: response line, Header, Body  
+range: 100-199: informational, 200-299: successful, 300-399: Redirection, 400-499: client error, 500-599: server error  
+message format: MINE content type, Multipurpose Internet Mail-Extension. Basic syntax: type/sub-type, e.g. text/html, text/plain  
+Client tools for send HTTP requests to the REST web service/API. e.g. curl, postman.  
+for advanced REST testing: POST, PUT use Postman for better support.  
+So what we did is, the REST API is the backend, we are creating endpoint, we can write `@RestController`, `@GetMapping` 
+code:
+```
+@RestController
+@RequestMapping("/test")
+public class DemoRestController  {
+    @GetMapping("/hello")
+    public String hello(){
+        return "hello world";
+    }
+}
+```
+so when we visit `/hello, it will return hello world.  
+### Java JSON Data Binding
+Data binding is the process of converting JSON data to JAVA POJO.  
+Spring use Jackson project behind the scenes, handling data binding, call setter method go from JSON to POJO. Have to have setter method, match the name of JSON.  
+Jackson call getter method go from POJO to JSON.  
+spring automatically use Jackson, JSON pass to the REST controller is converted to POJO, java object returned from REST controller is converted to JSON.  
+### create a new service for student
+
 
 
 
