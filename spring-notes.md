@@ -280,6 +280,25 @@ Spring use Jackson project behind the scenes, handling data binding, call setter
 Jackson call getter method go from POJO to JSON.  
 spring automatically use Jackson, JSON pass to the REST controller is converted to POJO, java object returned from REST controller is converted to JSON.  
 ### create a new service for student
+code:
+````agsl
+@RestController
+@RequestMapping("/api")
+public class StudentRestController {
+    @GetMapping("/students")
+    public List<Student> getAllStudents() {
+        List<Student> students = new ArrayList<>();
+        students.add(new Student("Smith", "John"));
+        students.add(new Student("Mary", "Zuick"));
+        students.add(new Student("qxc", "Ted"));
+        return students;
+    }
+````
+````agsl
+public class Student {
+    private String lastName;
+    private String firstName;
+````
 
 
 
