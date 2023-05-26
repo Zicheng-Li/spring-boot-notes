@@ -299,6 +299,15 @@ public class Student {
     private String lastName;
     private String firstName;
 ````
+### path variable
+retrieve a single student by id. `/api/students/{studentId}`  
+we can use `@PostConstruct` to construct date only once when bean created, we can use `@PathVariable` for `/{studentId}`  
+````agsl
+    @GetMapping("/students/{studentId}")
+    public Student getStudent(@PathVariable("studentId") int studentId) {  // by default, variables name should match
+        return students.get(studentId);
+    }
+````
 
 
 
