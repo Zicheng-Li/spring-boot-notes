@@ -410,6 +410,51 @@ Now we need to have a service layer implementation, which is between REST contro
 it can integrate multiple data sources, e,g. Skills dao, Payroll dao. it is common to see in large Enterprise applications.  
 specialized annotations for services, `@Service` is a mutation of `@Component`  
 remember do the injection for every component  
+### add, save, delete for DAO
+remember to add `@Transactional` on the service layer, no the DAO.  
+code for DAO:  
+```agsl
+@Override
+    public Employee save(Employee employee) {
+        //save the employee
+        Employee dbEmployee= entityManager.merge(employee);  // if id is ==0, then insert the employee, else update
+
+        // return the dbEmployee
+        return dbEmployee;
+    }
+```  
+code for service layer.
+```agsl
+@Transactional
+    @Override
+    public void deleteById(int id) {
+        employeeDAO.deleteById(id);
+    }
+```  
+### in the REST controller
+code for GET
+```agsl
+// add mapping for GET /employees/{employeeId} by Id
+    @GetMapping("/employees/{employeeId}")
+    public Employee getEmployee(@PathVariable int employeeId) {
+        Employee employee = employeeService.findById(employeeId);
+        if(employee == null) {
+            throw new RuntimeException("employee id not found" + employeeId);
+        }
+        return employee;
+    }
+```  
+code for POST
+````agsl
+@PostMapping("/employees")
+    public Employee addEmployee(@RequestBody Employee employee) {
+        // set the id to 0 in case of they pass an id to Json
+        // this is force a save of new item
+        employee.setId(0);
+        Employee dbemployee = employeeService.save(employee);
+        return dbemployee;
+    }
+````
 
 
 
