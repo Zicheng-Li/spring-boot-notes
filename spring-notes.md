@@ -250,7 +250,7 @@ REST calls can be made over HTTP
 We will create a CRM service.  
 JavaScript Object Notation: JSON  
 The left part of the pair, is always double quotes, nested JSON objects, JSON arrays: use `["","","","","","]`  
-### REST HTTP
+### REST HTTP CURD
 `POST` : create an entity  
 `GET` : read a list of entities  
 `PUT` : Update an entity  
@@ -307,8 +307,109 @@ we can use `@PostConstruct` to construct date only once when bean created, we ca
     public Student getStudent(@PathVariable("studentId") int studentId) {  // by default, variables name should match
         return students.get(studentId);
     }
+````  
+### exception handling
+1. create StudentErrorResponse class
+2. create StudentNotFoundException extends RuntimeException
+3. make a if statement
+4. use `@ExceptionHandler`
+code for the index out of range exception:
+we need to first throw an exception
+````agsl
+// check the student id against list size
+        if((studentId >= students.size()) || (studentId < 0)) {
+            throw new StudentNotFoundException("student id not found" + studentId);
+        }
+````  
+then we can create the error response
+````agsl
+public ResponseEntity<StudentErrorResponse> handleException(StudentNotFoundException exc) {
+        // create a StudentErrorResponse
+        StudentErrorResponse errorResponse = new StudentErrorResponse();
+        errorResponse.setStatus(HttpStatus.NOT_FOUND.value());
+        errorResponse.setMessage(exc.getMessage());
+        errorResponse.setTimeStamp(System.currentTimeMillis());
+        // return ResponseEntity
+        return new ResponseEntity<>(errorResponse,HttpStatus.NOT_FOUND);
+    }
+````  
+### exception handling for general case
+````agsl
+@ExceptionHandler
+    public ResponseEntity<StudentErrorResponse> handleException(Exception exc) {
+        // create a StudentErrorResponse
+        StudentErrorResponse errorResponse = new StudentErrorResponse();
+        errorResponse.setStatus(HttpStatus.BAD_REQUEST.value());
+        errorResponse.setMessage(exc.getMessage());
+        errorResponse.setTimeStamp(System.currentTimeMillis());
+        // return ResponseEntity
+        return new ResponseEntity<>(errorResponse,HttpStatus.BAD_REQUEST);
+    }
 ````
+### global exception handling
+now it is only for 1 REST controller, but we need for all other controllers. So we need to have global.  
+**Aspect-oriented programming**  
+globalExceptionHandler is best practice for large projects  
+code:
+```agsl
+@ControllerAdvice
+public class StudentRestExceptionHandler{
+ // the same exception as above
+}
+```  
+### API design process
+1. review API requirements
+2. Identify main resource / entity
+3. use HTTP method to assign action on resource  
 
+   `POST` : /api/employees create an entity  
+   `GET` : /api/employees or /api/employees/{employeeId} read a list of entities  
+   `PUT` : Update an entity  
+   `DELETE` : delete an entity  
+
+do not do:
+include the action in the endpoints  
+do: use HTTP method to assign action on resource  
+convention is to use plural form on API  
+### create JPA DAO
+standard JPA DAO API  
+first create entity package and employee class, then create DAO interface and implement  
+code:
+```agsl
+@Autowired
+    public EmployeeDAOImp(EntityManager entityManager) {
+        this.entityManager = entityManager;
+    }
+    public List<Employee> findAll() {
+
+        // create a query
+        TypedQuery<Employee> query = entityManager.createQuery("from Employee", Employee.class);
+
+        // execute the query
+        List<Employee> results = query.getResultList();
+
+        // return the results
+        return results;
+    }
+```  
+code for EmployeeRestController:
+```agsl
+@RestController
+@RequestMapping("/api")
+public class EmployeeRestController {
+    private EmployeeDAO employeeDao;
+    public EmployeeRestController(EmployeeDAO employeeDao) {
+        this.employeeDao = employeeDao;
+    }
+    @GetMapping("/employees")
+    public List<Employee> findAll() {
+        return employeeDao.findAll();
+    }
+```
+Now we need to have a service layer implementation, which is between REST controller and DAO. It is **service facade** design pattern  
+it can integrate multiple data sources, e,g. Skills dao, Payroll dao. it is common to see in large Enterprise applications.  
+specialized annotations for services, `@Service` is a mutation of `@Component`  
+remember do the injection for every component  
 
 
 
