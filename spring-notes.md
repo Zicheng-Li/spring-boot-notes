@@ -503,7 +503,29 @@ new feature in Java 8 using the optional:
         return employee;
     }
 ````
+### 07-JPA for rest endpoint
+the same method as above  
+only need 3 items for Spring data REST:  
+1. the entity: Employee
+2. Jpa repository extends jpaRepository
+3. Maven POM dependency: 
 
+terminology: HATEOAS: Hypermedia as the Engine of Application State: the meta-data for REST  
+We can add dependencies 
+```agsl
+<dependency>
+			<groupId>org.springframework.boot</groupId>
+			<artifactId>spring-boot-starter-data-rest</artifactId>
+		</dependency>
+```
+we don't need controller and services package. spring will be provided. we only need the entity  
+noticed, for the rest endpoint, when we try PUT we need to use `http://localhost:8080/magic-api/employees/5` we need to specify the id in the URL.  
+### pluralized forms for REST
+problems: some words can not have the plural forms are complex.  
+properties available for application. 
+we can use `@RepositoryRestResource(path="members")` to change the path name.
+we can also use sorting, sorting by last name. `http://localhost:8080/magic-api/employees?sort=lastName,desc`  
+pagination: `spring.data.rest.default-page-size=3`
 
 
 
