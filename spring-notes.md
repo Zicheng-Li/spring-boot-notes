@@ -454,6 +454,54 @@ code for POST
         Employee dbemployee = employeeService.save(employee);
         return dbemployee;
     }
+````  
+code for PUT:
+```agsl
+@PutMapping("/employees")
+    public Employee updateEmployee(@RequestBody Employee employee) {
+        Employee dbemployee = employeeService.save(employee);
+        return dbemployee;
+    }
+```  
+mistake I made, `@PutMapping("/employees/")`  
+code for DELETE  
+```agsl
+@DeleteMapping("/employees/{employeeId}")
+    public String deleteEmployee(@PathVariable int employeeId) {
+
+        Employee dbemployee = employeeService.findById(employeeId);
+        // check for exception
+        if (dbemployee == null){
+            throw new RuntimeException("employee id not found" + employeeId);
+        }
+        employeeService.deleteById(employeeId);
+
+        return "delete employee # " + employeeId;
+    }
+```  
+### 06-jpaRepository
+use CRUD methods for every DAO, no need to implement the class. use the Spring Data JPA, no need to write DAO implement code.  
+we can remove the ` @Transactional` since we use the JPA interface.  
+interface:
+```agsl
+public interface EmployeeRepository extends JpaRepository<Employee, Integer> {
+    // that is it, no need to write anything
+}
+```
+new feature in Java 8 using the optional:
+````agsl
+@Override
+    public Employee findById(int id) {
+        Optional<Employee> result = employeeRepository.findById(id);
+        Employee employee = null;
+        if (result.isPresent()) {
+            employee=result.get();
+        }
+        else {
+            throw new RuntimeException("Couldn't find employee" + id);
+        }
+        return employee;
+    }
 ````
 
 
