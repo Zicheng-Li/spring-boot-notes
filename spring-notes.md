@@ -1,5 +1,5 @@
 # Notes:
-[links to demo](/Users/lizicheng/Desktop/java/spring/spring-boot-3-spring-6-hibernate-for-beginners-main/01-spring-boot-overview/03-actuator-demo)
+<!-- [links to demo](/Users/lizicheng/Desktop/java/spring/spring-boot-3-spring-6-hibernate-for-beginners-main/01-spring-boot-overview/03-actuator-demo) -->
 
 --
 Actuator
@@ -22,8 +22,6 @@ context path of the app: `servlet.context-path=/my-silly-app/hello`
 Actuator: `exclude=beans,mapping` and `include=*`  
 Security: `.user.name=admin` and `.user.password=8888`  
 [links to spring props](https://www.luv2code.com/spring-boot-props)
-# Notes:
-[links to demo] ()
 
 --
 ### Inversion of Control(IoC)  
