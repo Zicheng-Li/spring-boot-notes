@@ -525,6 +525,7 @@ we can use `@RepositoryRestResource(path="members")` to change the path name.
 we can also use sorting, sorting by last name. `http://localhost:8080/magic-api/employees?sort=lastName,desc`  
 pagination: `spring.data.rest.default-page-size=3`
 
+## spring security
 
 
 
