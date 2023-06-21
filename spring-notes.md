@@ -568,6 +568,21 @@ code:
         return http.build();
     }
 ```
+### Database access in plain text
+step 1. Create sql query
+step 2. add JDBC driver in POM file
+step 3. create JDBC properties file  
+nice things is SpringBoot will use database data to do security login each new login attempt, no need to restart the application.  
+So first set up the password and username, admin role in the database, then add the following:
+```agsl
+@Bean
+    public UserDetailsManager UserDetailsManager(DataSource dataSource) {
+        return new JdbcUserDetailsManager(dataSource); //
+    }
+```
+### Database access with encryption
+
+
 
 
 
