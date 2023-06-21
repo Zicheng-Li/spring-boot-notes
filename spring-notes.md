@@ -526,6 +526,28 @@ we can also use sorting, sorting by last name. `http://localhost:8080/magic-api/
 pagination: `spring.data.rest.default-page-size=3`
 
 ## spring security
+implementing spring Servlet filters, two methods of securing: declarative and programmatic.
+### declarative security
+use `@Configuration` 
+use spring.security.user.name=scott  
+we can use `spring.security.user.password=test123` to modify username and password  
+### configuration for security 
+1. create a new class
+```agsl
+@Configuration
+public class DemoSecurityConfig {
+    @Bean
+    public InMemoryUserDetailsManager userDetailsManager() {
+        UserDetails susan = User.builder()
+                .username("susan")
+                .password("{noop}test123")
+                .roles("EMPLOYEE", "MANAGER", "ADMIN")
+                .build();
+        return new InMemoryUserDetailsManager(john, mary, susan);
+    }
+}
+```
+
 
 
 
