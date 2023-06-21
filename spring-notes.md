@@ -547,6 +547,27 @@ public class DemoSecurityConfig {
     }
 }
 ```
+### restricting access to roles
+cross site request forgery(CSRF) generally, we don't need to use CSRF for stateless REST api.  
+code:
+```agsl
+@Bean
+    public SecurityFilterChain filterChain(HttpSecurity http) throws Exception {
+        http.authorizeHttpRequests(configurer ->
+                configurer
+                        .requestMatchers(HttpMethod.GET, "/api/employees").hasRole("EMPLOYEE")
+                        .requestMatchers(HttpMethod.GET, "/api/employees/**").hasRole("EMPLOYEE")
+                        .requestMatchers(HttpMethod.POST, "/api/employees").hasRole("MANAGER")
+                        .requestMatchers(HttpMethod.PUT, "/api/employees").hasRole("MANAGER")
+                        .requestMatchers(HttpMethod.DELETE, "/api/employees/**").hasRole("ADMIN")
+        );
+        // use HTTP Basic authentication
+        http.httpBasic(Customizer.withDefaults());
+        // disable CSRF, in general, not required for stateless REST APIs
+        http.csrf(csrf -> csrf.disable());
+        return http.build();
+    }
+```
 
 
 
