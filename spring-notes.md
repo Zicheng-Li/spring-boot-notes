@@ -581,7 +581,25 @@ So first set up the password and username, admin role in the database, then add 
     }
 ```
 ### Database access with encryption
+The password in database will never decrypt. Bcrypt is a one way encryption. The process of login is:  
+1. encrypt the password that user entre
+2. compare with the Bcrypt code with the database ones. 
 
+we don't need to change the java source code, we only need to change the sql script, with `{bcrypt}$2a$10$qeS0HEh7urweMojsnwNAR.vcXJeXR1UcMRZ2WcGQl9YeuspUdgF.q` where the bcrypt code we need to generate.
+### security custom tables
+you need to provide a query, tell spring find the name in database. Nothing is match with default spring schema. 
+code:
+```agsl
+@Bean
+    public UserDetailsManager UserDetailsManager(DataSource dataSource) {
+        JdbcUserDetailsManager jdbcUserDetailsManager = new JdbcUserDetailsManager(dataSource);
+        // define the SQL query to get a user by username
+        jdbcUserDetailsManager.setUsersByUsernameQuery("select user_id, pw, active from members where user_id=?");
+        // define the SQL query to get a role by username
+        jdbcUserDetailsManager.setAuthoritiesByUsernameQuery("select user_id, role from roles where user_id=?");
+        return jdbcUserDetailsManager; //
+    }
+```
 
 
 
