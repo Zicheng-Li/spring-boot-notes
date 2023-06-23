@@ -633,7 +633,52 @@ we can add an index.html file to redirect to the `/employees/list` by default. S
 <meta http-equiv="refresh"
       content="0; URL='employees/list'">
 ```
-
+thymeleaf has special expression for binding Spring MVC from data. Automatically setting and retrieving data from a Java object.  
+`Post/Redirect/Get` method  
+```agsl
+// the default path is to look at the templates folder for the view
+		return "employees/list-employees";
+```
+Add a bottom to add employees: 
+```agsl
+<a th:herf="@{/employees/showFormForAdd}" class="btn btn-primary btn-sm mb-3"> Add Employee</a>
+```
+thymeleaf can blind the data by itself. For showing the form, add this to controller:
+```agsl
+@GetMapping("/showFormForAdd")
+    public String showFormForAdd(Model theModel) {
+        // create model attribute to bind form data
+        Employee theEmployee = new Employee();
+        theModel.addAttribute("employee", theEmployee);
+        return "employees/employee-form";
+    }
+```
+`*` is meant to select properties on referenced th:object  
+When the form is loaded, it will first call the getter method. When we submit the form, it will call setter method. We need to create a new HTML file, core code for the form:
+```agsl
+<form action="#" th:action="@{/employees/save}"
+                        th:object="${employee}" method="post">
+            <input type="text" th:field="*{firstName}"
+                   class="form-control mb-4 w-25" placeholder="First name">
+            <input type="text" th:field="*{lastName}"
+                   class="form-control mb-4 w-25" placeholder="Last name">
+            <input type="text" th:field="*{email}"
+                   class="form-control mb-4 w-25" placeholder="email">
+            <button type="submit" class="btn btn-info col-2">
+                Save 
+            </button>
+        </form>
+```
+for the save mapping, we use a `Post/Redirect/Get` method:
+```agsl
+@PostMapping("/save")
+	public String saveEmployee(@ModelAttribute("employee") Employee theEmployee) {
+		// save the employee
+		employeeService.save(theEmployee);
+		// use a redirect to prevent duplicate submissions
+		return "redirect:/employees/list";
+	}
+```
 
 
 
