@@ -600,8 +600,30 @@ code:
         return jdbcUserDetailsManager; //
     }
 ```
-
-
+### Thymeleaf
+is a separate  template, but a lot of synergy with spring. spring will automatically go to /resource/templates/xxx.HTML  
+some code for thymeleaf:
+```agsl
+<! DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org/">
+<head>
+    <title>
+        Thymeleaf Demo
+    </title>
+</head>
+<body>
+<p th:text="'Time on the server is ' + ${theDate}" />
+</body>
+</html>
+```
+the code for the GET mapping:
+```agsl
+@GetMapping("/hello")
+    public String sayHello(Model theModel) {
+        theModel.addAttribute("theDate", new java.util.Date());
+        return "helloworld";
+    }
+```
 
 
 
