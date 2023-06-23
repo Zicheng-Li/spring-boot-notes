@@ -710,6 +710,25 @@ the code for the controller, it will pre-populate the form:
 ```
 then need to add the following to form.html: ` <!--add hidden form field to handle the update -->
 <input type="hidden" th:field="*{id}"/>`
+### delete employee
+add a delete button:
+```agsl
+<a th:href="@{/employees/delete(employeeId=${tempEmployee.id})}"
+					   class="btn btn-danger btn-sm"
+					onclick="if (!(confirm('Are you sure you want to delete this employee?'))) return false">
+						Delete
+					</a>
+```
+add the controller code for deleting:
+```agsl
+@GetMapping("/delete")
+    public String delete(@RequestParam("employeeId") int theId) {
+		// delete the employee
+        employeeService.deleteById(theId);
+        // redirect to /employees/list
+        return "redirect:/employees/list";
+	}
+```
 
 
 
