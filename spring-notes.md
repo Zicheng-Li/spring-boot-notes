@@ -679,7 +679,37 @@ for the save mapping, we use a `Post/Redirect/Get` method:
 		return "redirect:/employees/list";
 	}
 ```
-
+the spring JPA will parse the method name and create the query for you, you only need to write the function name, findAllBy is part of pattern, and it read order by lastname.  sort by lastName:
+```agsl
+ public List<Employee> findAllByOrderByLastNameAsc();
+ // update the impl
+ 	@Override
+	public List<Employee> findAll() {
+		return employeeRepository.findAllByOrderByLastNameAsc();
+	}
+```
+### update employees
+first need to add update bottom, this append to the URL ?employeeId=xxx:
+```agsl
+<a th:href="@{/employees/showFormForUpdate(employeeId=${tempEmployee.id})}"
+					class="btn btn-info btn-sm">
+						Update
+					</a>
+```
+the code for the controller, it will pre-populate the form:
+```agsl
+@GetMapping("/showFormForUpdate")
+	public String showFormForUpdate(@RequestParam("employeeId")  int theId, Model theModel) {
+	// get the employee from the service
+		Employee theEmployee = employeeService.findById(theId);
+		// set employee as a model attribute to pre-populate the form
+		theModel.addAttribute("employee", theEmployee);
+		// send over to our form
+		return "employees/employee-form";
+	}
+```
+then need to add the following to form.html: ` <!--add hidden form field to handle the update -->
+<input type="hidden" th:field="*{id}"/>`
 
 
 
