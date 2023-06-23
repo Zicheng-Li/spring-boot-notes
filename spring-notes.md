@@ -624,6 +624,17 @@ the code for the GET mapping:
         return "helloworld";
     }
 ```
+### use CSS for thymeleaf
+we have 2 opions: 1. local CSS file as part of the project. 2.referencing remote CSS file  
+add the link tag in the header: `<link rel="stylesheet" th:href="@{/css/demo.css}" />` then create a new CSS file under static/css
+### thymeleaf project
+we can add an index.html file to redirect to the `/employees/list` by default. So we can just go to localhost:8080 and it will redirect. Add:
+```agsl
+<meta http-equiv="refresh"
+      content="0; URL='employees/list'">
+```
+
+
 
 
 
