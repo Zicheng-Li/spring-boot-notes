@@ -766,7 +766,23 @@ code for configuring file:
         return http.build();
     }
 ```
-
+the code for the controller: we only need to return html file name. like here is returned ` return "plain-login";`  
+the code for the html login page, notice here we need to have `<html lang="en" xmlns:th="http://www.thymeleaf.org">` to add a tag name `th` the code:
+```agsl
+<body>
+<h3>My Custom Login Page</h3>
+<form action="#" th:action="@{/authenticateTheUser}" method="POST">
+    <p>
+        User name: <input type="text" name="username" />
+    </p>
+    <!-- spring will read from the data and authenticate the user using these default form field name-->
+    <p>
+        Password: <input type="password" name="password" />
+    </p>
+    <input type="submit" value="Login" />
+</form>
+</body>
+```
 
 
 
