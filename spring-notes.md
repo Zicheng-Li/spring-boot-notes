@@ -750,7 +750,23 @@ public class DemoSecurityConfig {
 ### custom login form
 first we need to modify the security config.  
 we don't need to write code for `/authenticateTheUser` because spring will handle this.  
-`@` in the path, it mean it is a context path, which refer to the root path of your application, like `http://localhost:8080/my-app`. The advantage of using the context root path it is change indepent, which mean when you change the app name, the link will still be valid. 
+`@` in the path, it means it is a context path, which refer to the root path of your application, like `http://localhost:8080/my-app`. The advantage of using the context root path it is change independent, which mean when you change the app name, the link will still be valid. 
+code for configuring file:
+```agsl
+@Bean
+    public SecurityFilterChain filterChain(HttpSecurity http) throws Exception {
+        http .authorizeHttpRequests(configurer ->
+                configurer
+                        .anyRequest().authenticated() )
+                .formLogin(form ->
+                        form
+                                .loginPage("/showMyLoginPage")
+                        .loginProcessingUrl("/authenticateTheUser")
+                        .permitAll());
+        return http.build();
+    }
+```
+
 
 
 
