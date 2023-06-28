@@ -733,9 +733,22 @@ add the controller code for deleting:
 spring security will automatically look you configuration and user and password. use the `@Configuration` to config. Spring give you the default login form. You can also custom the login form.
 ### security demo project
 problem: when you change your source code, if the user already logged in, it will not ask the user to login again, this is because login is based on browser session.  
-solve the problem: quit the browser and start again, or use a different browser session. or use incognito session
-
-
+solve the problem: quit the browser and start again, or use a different browser session. or use incognito session.
+### security demo code
+```agsl
+@Configuration
+public class DemoSecurityConfig {
+    @Bean
+    public InMemoryUserDetailsManager UserDetailsManager() {
+        UserDetails john = User.builder()
+                .username("john")
+                .password("{noop}test123")
+                .roles("EMPLOYEE")
+                .build();
+                return new InMemoryUserDetailsManager(john, mary, susan);
+```
+### custom login form
+first we need to modify the security config.
 
 
 
