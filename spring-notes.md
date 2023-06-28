@@ -729,6 +729,11 @@ add the controller code for deleting:
         return "redirect:/employees/list";
 	}
 ```
+### Spring Security with Servlet Filters
+spring security will automatically look you configuration and user and password. use the `@Configuration` to config. Spring give you the default login form. You can also custom the login form.
+### security demo project
+problem: when you change your source code, if the user already logged in, it will not ask the user to login again, this is because login is based on browser session.  
+solve the problem: quit the browser and start again, or use a different browser session. or use incognito session
 
 
 
