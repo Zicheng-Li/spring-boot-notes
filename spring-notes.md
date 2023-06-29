@@ -783,6 +783,15 @@ the code for the html login page, notice here we need to have `<html lang="en" x
 </form>
 </body>
 ```
+### login in form error message
+spring will send a URL with `?error` so we can just write code for that.  
+code:
+```agsl
+<div th:if="${param.error}">
+        <i class="failed">
+            Sorry! You entered the wrong password or username.
+        </i>
+```
 
 
 
