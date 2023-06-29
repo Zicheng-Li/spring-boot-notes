@@ -844,6 +844,19 @@ add this to the security configuration:
                         .requestMatchers("/systems/**").hasRole("ADMIN")
 ```
 the code for the system peeps, is similar to above.
+### custom assess denied page
+add this to the security configuration:
+```agsl
+.exceptionHandling(configurer -> configurer.accessDeniedPage("/access-denied"));
+```
+add this to the login controller:
+```agsl
+ @GetMapping("/access-denied")
+    public String showAccessDenied() {
+        return "access-denied";
+    }
+```
+create a html page:
 
 
 
