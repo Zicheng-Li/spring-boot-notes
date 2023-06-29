@@ -811,6 +811,15 @@ code add on config file:
 ```agsl
 .logout(logout ->logout.permitAll() 
 ```
+### display for the user role and ID
+we only need to add some html on the home screen:
+```agsl
+<p>
+    User: <span sec:authentication="principal.username"></span>
+    <br><br>
+    Role(s): <span sec:authentication="principal.authorities"></span>
+</p>
+```
 
 
 
