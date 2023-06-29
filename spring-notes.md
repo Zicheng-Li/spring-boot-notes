@@ -792,6 +792,25 @@ code:
             Sorry! You entered the wrong password or username.
         </i>
 ```
+### logout
+the URL `/logout` will handle by spring, you will get this for free. no code needed. By default, must use POST method. GET method is disabled by default.  
+code for logout:
+```agsl
+<!-- Check for logout -->
+                                            <div th:if="${param.logout}">
+                                                <div class="alert alert-success col-xs-offset-1 col-xs-10">
+                                                    You have been logged out.
+                                                </div> </div>
+```
+code on the home screen:
+```agsl
+<form method="POST" action="#" th:action="@{/logout}">
+<input type="submit"  value="Logout" />
+```
+code add on config file:
+```agsl
+.logout(logout ->logout.permitAll() 
+```
 
 
 
