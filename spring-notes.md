@@ -820,6 +820,30 @@ we only need to add some html on the home screen:
     Role(s): <span sec:authentication="principal.authorities"></span>
 </p>
 ```
+### restrict URL based on the role
+first add new html file for manager:
+`<a th:href="@{/}"> back to home page</a>`  
+we add the link on the home page:
+```agsl
+<p>
+    <a th:href="@{/leaders}">Leadership Meeting</a>
+    (only available for managers)
+</p>
+```
+add this to the controller:
+```agsl
+@GetMapping("/leaders")
+    public String showLeaders() {
+        return "leaders";
+}
+```
+add this to the security configuration:
+```agsl
+.requestMatchers("/").hasRole("EMPLOYEE")
+                        .requestMatchers("/leaders/**").hasRole("MANAGER")
+                        .requestMatchers("/systems/**").hasRole("ADMIN")
+```
+the code for the system peeps, is similar to above.
 
 
 
