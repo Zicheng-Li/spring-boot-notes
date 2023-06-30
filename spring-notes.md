@@ -857,7 +857,45 @@ add this to the login controller:
     }
 ```
 create a html page:
+### display content based on the role:
+the browser sources code will not have the html for this page. We can add role on the home page HTML tags:
+```agsl
+<div sec:authorize="hasRole('MANAGER')">
+    <!-- this will only display for manager-->
+    <p>
+        <a th:href="@{/leaders}">Leadership Meeting</a>
+        (only available for managers)
+    </p>
+</div>
+```
+### use database to store password
+spring security have default database, the table name. we have to match the name of the database. one is called users, and another is called authorities.  
+1. run sql script for sql
+2. add Maven dependence
+3. update security configuration
+4. add code to use database  
 
+add Maven dependency:
+```agsl
+<dependency>
+			<groupId>org.springframework.boot</groupId>
+			<artifactId>spring-boot-starter-data-jpa</artifactId>
+		</dependency>
+		<dependency>
+			<groupId>com.mysql</groupId>
+			<artifactId>mysql-connector-j</artifactId>
+			<scope>runtime</scope>
+		</dependency>
+```
+add this to security configuration, it can tell spring to use JDBC authentication with data source:
+```agsl
+@Bean
+    public UserDetailsManager userDetailsManager(DataSource dataSource){
+
+        return new JdbcUserDetailsManager(dataSource);
+    }
+```
+we can look at the log to check is connected to database.
 
 
 
