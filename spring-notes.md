@@ -895,7 +895,11 @@ add this to security configuration, it can tell spring to use JDBC authenticatio
         return new JdbcUserDetailsManager(dataSource);
     }
 ```
-we can look at the log to check is connected to database.
+we can look at the log to check is connected to database. `logging.level.org.springframework.jdbc.core=TRACE`
+### spring security with password encryption
+we cover this before, only update the sql script.
+### custom sql table
+we cover this before, same things.
 
 
 
