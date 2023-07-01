@@ -900,6 +900,40 @@ we can look at the log to check is connected to database. `logging.level.org.spr
 we cover this before, only update the sql script.
 ### custom sql table
 we cover this before, same things.
+## JPA advanced mapping
+### one-to-one mapping
+Cascade mapping: apply same operation to related entities. if we save the teachers, then we will save the teacher's details. If we delete a teacher then we will delete the teacher's details.  
+depend on the case, we can delete a student and delete the course.  
+Eager and lazy fetching, eager will retrieve everything, and lazy fetch only the requested.  
+ui mean one direction, bi mean 2 direction.
+### entity life cycle
+Detach: it is not associated with a Hibernate session.
+merge: it will reattach the session  
+presist: transition new instances to managed state, next flush or commit will save on the db.  
+remove: managed to remove the session, it will remove from db.  
+refresh: it will reload the data from database  
+cascade: it is the same as the above. Except ones, it has ALL, which is the combination of all.  
+by default, there is no opreation are cascaded.
+### command line runner
+```agsl
+@Bean
+	public CommandLineRunner commandLineRunner(String[] args) {
+		return runner -> {
+			System.out.println("Hello World");
+		};
+```
+we can turn the banner off and only show the warning message
+```agsl
+spring.main.banner-mode=off
+logging.level.root=warn
+```
+now we need to first create the Instructor class
+1. create the Instructor class
+2. create the InstructorDetail class
+3. create the DAO class
+
+
+
 
 
 
