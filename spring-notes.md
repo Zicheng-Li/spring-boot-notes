@@ -987,6 +987,28 @@ also for the DAO:
         return entityManager.find(Instructor.class ,theId);
     }
 ```
+add these to the command line runner:
+```agsl
+private void deleteInstructor(AppDAO appDAO) {
+		int id=2;
+		System.out.println("delete with id " + id);
+		appDAO.deleteById(id);
+		System.out.println("Done!");
+	}
+```
+add these to the DAO:
+```agsl
+@Override
+    @Transactional
+    public void deleteById(int theId) {
+        // retrieve instructor by id
+        Instructor tempinstructor = entityManager.find(Instructor.class ,theId);
+        // delete the instructor
+        if(tempinstructor != null) {
+            entityManager.remove(tempinstructor);
+        }
+    }
+```
 
 
 
