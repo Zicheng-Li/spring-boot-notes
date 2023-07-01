@@ -931,6 +931,37 @@ now we need to first create the Instructor class
 1. create the Instructor class
 2. create the InstructorDetail class
 3. create the DAO class
+### DAO
+it will also save for the InstructorDetail class, because the cascaded.  
+we can inject the app dao here, it uses beans, so it automatically inject.
+```agsl
+@Bean
+	public CommandLineRunner commandLineRunner(AppDAO appDAO) {
+		return runner -> { 
+			System.out.println("Hello World");
+		};
+```
+### JPA log
+```agsl
+logging.level.org.hibernate.SQL=trace // this will see log sql statements
+logging.level.org.hibernate.orm.jdbc.bind=trace // this will see values for sql
+```
+this is the code for commonline runner:
+```agsl
+private void createInstructor(AppDAO appDAO) {
+		 // create Instructor
+		Instructor tempInstructor = new Instructor("Susan", "Public", "susan@rbc.com");
+		// create instructor detail
+        InstructorDetail tempInstructorDetail = new InstructorDetail("http://www.youtube.com", "Video Games");
+		// associate the objects
+		tempInstructor.setInstructorDetail(tempInstructorDetail);
+		// save the instructor
+		// this will also save the details object because of CascadeType.ALL
+		System.out.println("saving instructor: " + tempInstructor);
+		appDAO.save(tempInstructor);
+		System.out.println("Done!");
+```
+
 
 
 
