@@ -1098,6 +1098,46 @@ this is what we did for many-to-one relationships in the course class:
     @JoinColumn(name="instructor_id")
     private Instructor instructor;
 ```
+in the database, it set the ID of the course starting from the 10 `AUTO_INCREMENT=10`  
+we need to add code on the APP Runner:
+```agsl
+// save the instructor
+		// note: this will ALSO save the course because of CascadeType.ALL
+		System.out.println("Saving instructor: " + tempInstructor);
+		System.out.println("Saving the course " + tempInstructor.getCourses() );
+		appDAO.save(tempInstructor);
+```
+### fetch types: Eager vs Lazy
+eager will retrieve everything, but lazy only retrieve request. we want to search by name.  
+**the real world prefer lazy loading to eager loading.**  
+real world example: we can search instructor by name, this is lazy loading, then an optional for users to view the details, then we can use eager loading.  
+default fetch type:   
+* for one-to-one is eager loading
+* one-to-many is lazy loading
+* many-to-one is eager loading
+* many-to-many is lazy  
+
+we can overload the methods. The key of the lazy loading, it will request the Hibernate session is opened, if the session is closed, it will throw an exception  
+this will only load the instructor:
+```agsl
+private void findInstructorWithCourse(AppDAO appDAO) {
+		Instructor instructor = appDAO.findById(1);
+		System.out.println("finding the instructor");
+        System.out.println(instructor);
+	}
+```
+this will throw an exception:
+```agsl
+private void findInstructorWithCourse(AppDAO appDAO) {
+		Instructor instructor = appDAO.findById(1);
+		System.out.println("finding the instructor");
+        System.out.println(instructor);
+		System.out.println("the course" + instructor.getCourses()); // this line error
+	}
+```
+we can use change the fetch type: `fetch = FetchType.EAGER`
+
+
 
 
 
