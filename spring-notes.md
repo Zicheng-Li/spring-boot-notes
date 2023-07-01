@@ -1009,9 +1009,70 @@ add these to the DAO:
         }
     }
 ```
-
-
-
+### bi-direction mapping
+`mappedby` will map the instructor detail in the instructor class.  
+1. we need to add new field to instructor
+2. add getter/setter method
+3. add `@one-to-one`
+```agsl
+@OneToOne(mappedBy = "instructorDetail", cascade= CascadeType.ALL) 
+    //mappedBy is used to specify the name of the field in the entity class that is the inverse of this relationship.
+    private Instructor instructor;
+```
+4. add DAO method:
+```agsl
+@Override
+    public InstructorDetail findInstructorDetailById(int theId) {
+        return entityManager.find(InstructorDetail.class ,theId);
+    }
+```
+add these methods to command line runner:
+```agsl
+private void findInstructorDetail(AppDAO appDAO) {
+		// get the instructor detail object
+		int id = 1;
+		System.out.println("InstructorDetail with id " + id);
+		InstructorDetail tempInstructorDetail = appDAO.findInstructorDetailById(id);
+		System.out.println("InstructorDetail: " + tempInstructorDetail);
+		System.out.println("Instructor: " + tempInstructorDetail.getInstructor());
+		System.out.println("Done!");
+	}
+```
+### cascade delete instructor detail and instructor
+add to command line runner:
+```agsl
+private void deleteInstructorDetail(AppDAO appDAO) {
+		int id=3;
+        System.out.println("delete with id " + id);
+        appDAO.deleteInstructorDetailById(id);
+        System.out.println("Done!");
+	}
+```
+add to DAO:
+```agsl
+ @Override
+    @Transactional
+    public void deleteInstructorDetailById(int theId) {
+        // retrieve instructor by id
+        InstructorDetail tempinstructorDetail = entityManager.find(InstructorDetail.class ,theId);
+        // delete the instructor
+        if(tempinstructorDetail != null) {
+            entityManager.remove(tempinstructorDetail);
+        }
+```
+### we only want to delete details
+we need to modify the Instructor DAO:
+```agsl
+@OneToOne(mappedBy = "instructorDetail", cascade= {CascadeType.DETACH, CascadeType.MERGE, CascadeType.PERSIST, CascadeType.REFRESH})
+```
+we also need to modify the DAO, remove the Instructor for InstructorDetail:
+```agsl
+// remove the associated object reference
+        // break bidirectional link
+        if(tempinstructorDetail != null) {
+            tempinstructorDetail.getInstructor().setInstructorDetail(null);
+        }
+```
 
 
 
