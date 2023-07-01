@@ -1073,6 +1073,32 @@ we also need to modify the DAO, remove the Instructor for InstructorDetail:
             tempinstructorDetail.getInstructor().setInstructorDetail(null);
         }
 ```
+## many-to-one relationship
+do not apply cascading delete. we also need to set up the bi-direction between course and instructor.  
+now we need to create a class for course.  
+we also need to an add method in the instructor class:
+```agsl
+// add convenience methods for bidirectional relationship
+    public void add(Course tempCourse){
+        if(courses == null){
+            courses = new java.util.ArrayList<>();
+        }
+        courses.add(tempCourse);
+        tempCourse.setInstructor(this);
+    }
+```
+we also need to add the one-to-many relationship in the instructor class:
+```agsl
+ @OneToMany(mappedBy = "instructor", cascade = {CascadeType.DETACH,CascadeType.MERGE,CascadeType.PERSIST,CascadeType.REFRESH})//mappedBy is the name of the field in the Course class
+    private List<Course> courses;
+```
+this is what we did for many-to-one relationships in the course class:
+```agsl
+@ManyToOne(cascade = {CascadeType.DETACH,CascadeType.MERGE,CascadeType.PERSIST,CascadeType.REFRESH})
+    @JoinColumn(name="instructor_id")
+    private Instructor instructor;
+```
+
 
 
 
