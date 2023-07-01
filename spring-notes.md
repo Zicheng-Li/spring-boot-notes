@@ -961,7 +961,32 @@ private void createInstructor(AppDAO appDAO) {
 		appDAO.save(tempInstructor);
 		System.out.println("Done!");
 ```
-
+don't forget to use `@Repository`
+### find instructor by ID
+code:
+```agsl
+@Override
+    public Instructor findById(int theId) {
+        return entityManager.find(Instructor.class ,theId);
+    }
+```
+we need to add a method to find by the ID:
+```agsl
+private void findInstructor(AppDAO appDAO) {
+		int id=2;
+		System.out.println("findInstructor with id " + id);
+		Instructor tempInstructor = appDAO.findById(id);
+		System.out.println("Instructor: " + tempInstructor);
+		System.out.println("InstructorDetail: " + tempInstructor.getInstructorDetail());
+	}
+```
+also for the DAO:
+```agsl
+@Override
+    public Instructor findById(int theId) {
+        return entityManager.find(Instructor.class ,theId);
+    }
+```
 
 
 
