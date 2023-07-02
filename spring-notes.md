@@ -1189,8 +1189,42 @@ TypedQuery<Instructor> query = entityManager.createQuery("select i from Instruct
 ```
 ### update instructor
 we need to first find the instructor, then call the setter method, then update the DAO.  
- 
-
+we need to first write a save method in DAO:
+```agsl
+@Override
+    @Transactional
+    public void updateInstructor(Instructor instructor) {
+        entityManager.merge(instructor);
+    }
+```
+then we can have this method on the runner.
+```agsl
+private void UpdateInstructor(AppDAO appDAO) {
+		Instructor instructor = appDAO.findById(1);
+        System.out.println("finding the instructor");
+        System.out.println(instructor);
+        // update the instructor
+        instructor.setLastName("tester");
+        // save the instructor
+        System.out.println("Saving instructor: " + instructor);
+        appDAO.updateInstructor(instructor);
+        System.out.println("done!");
+	}
+```
+### update course
+the same thing as above
+### delete the instructor
+**we need to first break associations** of all instructor's course, then delete.  
+code:
+```agsl
+// get the courses for the instructor
+        List<Course> courses = tempinstructor.getCourses();
+        // delete the associated object reference
+        // break bidirectional link
+        for (Course course : courses) {
+            course.setInstructor(null);
+        }
+```
 
 
 
