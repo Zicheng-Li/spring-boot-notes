@@ -1274,6 +1274,27 @@ we will a save method to save the course:
         entityManager.persist(course); // it will also save the comments
     }
 ```
+### retrieve course and review
+we need to retrieve by query:
+```agsl
+        // create a query
+        TypedQuery<Course> query = entityManager.createQuery("select c from Course c " + "JOIN FETCH c.reviews " + "where c.id = :data" ,Course.class);
+        query.setParameter("data" ,theId);
+        // execute query
+        Course course = query.getSingleResult();
+        return course;
+    }
+```
+### delete the course
+we simply need to have a method to delete the course in the Runner:
+```agsl
+private void deleteCourseAndReview(AppDAO appDAO) {
+		int theId=10;
+		System.out.println("Deleting the course and review with id: " + theId);
+		appDAO.deleteCourseById(theId); // this will course and reviews
+		System.out.println("done!");
+	}
+```
 
 
 
