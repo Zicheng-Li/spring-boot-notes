@@ -1225,6 +1225,17 @@ code:
             course.setInstructor(null);
         }
 ```
+### delete the course
+we can add these code to the DAO:
+```agsl
+ @Override
+    @Transactional
+    public void deleteCourseById(int theId) {
+        Course theCourse = entityManager.find(Course.class, theId);
+        entityManager.remove(theCourse);
+    }
+```
+
 
 
 
