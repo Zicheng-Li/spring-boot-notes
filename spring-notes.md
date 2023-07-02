@@ -1135,7 +1135,30 @@ private void findInstructorWithCourse(AppDAO appDAO) {
 		System.out.println("the course" + instructor.getCourses()); // this line error
 	}
 ```
-we can use change the fetch type: `fetch = FetchType.EAGER`
+we can use change the fetch type: `fetch = FetchType.EAGER`  
+### lazy: find course
+we need to have this method in the DAO:
+```agsl
+@Override
+    public List<Course> findCoursesByInstructorId(int theId) {
+        TypedQuery<Course> query = entityManager.createQuery("from Course where instructor.id = :data" ,Course.class);
+        query.setParameter("data" ,theId);
+        List<Course> courses = query.getResultList();
+        return courses;
+    }
+```
+we can have this method in the runner:
+```agsl
+private void findCourseForInstructor(AppDAO appDAO) {
+		Instructor instructor = appDAO.findById(1);
+		System.out.println("finding the instructor");
+		System.out.println(instructor);
+		// find courses for the instructor
+		System.out.println("finding the course with the id");
+		List<Course> courses = appDAO.findCoursesByInstructorId(1);
+		System.out.println(courses);
+        System.out.println("done!");
+```
 
 
 
