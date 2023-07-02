@@ -1235,7 +1235,45 @@ we can add these code to the DAO:
         entityManager.remove(theCourse);
     }
 ```
-
+### one-to-many relationship
+we need to create a new entity class, and we need to add new methods on the course class:
+```agsl
+@OneToMany(fetch = FetchType.LAZY, cascade= CascadeType.ALL)
+    @JoinColumn(name="course_id")
+    private List<Review> reviews;
+    // add a convenience method
+    public void addReview(Review theReview){
+        if(reviews==null){
+            reviews=new ArrayList<Review>();
+        }else {
+            reviews.add(theReview);
+        }
+    }
+```
+### Create course and review and save
+we need this method on the runner:
+```agsl
+	private void createCourseAndReview(AppDAO appDAO) {
+		Course course = new Course("x++");
+		course.addReview(new Review("love this one"));
+		course.addReview(new Review("love this x++"));
+		course.addReview(new Review("love this java"));
+		course.addReview(new Review("love this c"));
+		appDAO.save(course);
+		System.out.println("saving the course");
+		System.out.println(course);
+		System.out.println("course reviews: " + course.getReviews());
+		System.out.println("done!");
+	}
+```
+we will a save method to save the course:
+```agsl
+@Override
+    @Transactional
+    public void save(Course course) {
+        entityManager.persist(course); // it will also save the comments
+    }
+```
 
 
 
