@@ -1159,8 +1159,37 @@ private void findCourseForInstructor(AppDAO appDAO) {
 		System.out.println(courses);
         System.out.println("done!");
 ```
-
-
+### use lazy but also only need 1 query
+we can use JOIN FETCH, it is similar to eager. 
+add a query on the DAO:
+```agsl
+@Override
+    public Instructor findInstructorByIdJoinFetch(int theId) {
+        // create a query
+        TypedQuery<Instructor> query = entityManager.createQuery("select i from Instructor i " + "JOIN FETCH i.courses " + "where i.id = :data" ,Instructor.class);
+        query.setParameter("data" ,theId);
+        Instructor instructor = query.getSingleResult();
+        return instructor;
+    }
+```
+we can also add theses methods on the runner:
+```agsl
+private void findInstructorWithCourseJoinFetch(AppDAO appDAO) {
+		Instructor instructor = appDAO.findInstructorByIdJoinFetch(1);
+        System.out.println("finding the instructor");
+        System.out.println(instructor);
+        // find courses for the instructor
+        System.out.println("finding the course with the id" + instructor.getCourses());
+        System.out.println("done!");
+	}
+```
+we can also try to minimize the query into one query:
+```agsl
+TypedQuery<Instructor> query = entityManager.createQuery("select i from Instructor i " + "JOIN FETCH i.courses "+ "JOIN FETCH i.instructorDetail "+ "where i.id = :data" ,Instructor.class);
+```
+### update instructor
+we need to first find the instructor, then call the setter method, then update the DAO.  
+ 
 
 
 
