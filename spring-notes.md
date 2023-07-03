@@ -1295,8 +1295,83 @@ private void deleteCourseAndReview(AppDAO appDAO) {
 		System.out.println("done!");
 	}
 ```
-
-
+## many-to-many
+we need a join table to maintainer the relationship between students and course. `@JoinTable` and also `Inverse`  
+this first part is to create students entity. Then we need to update the course class:
+```agsl
+ @ManyToMany(fetch = FetchType.LAZY,cascade = {CascadeType.DETACH,CascadeType.MERGE,CascadeType.PERSIST,CascadeType.REFRESH})
+    @JoinTable(name="course_student",
+    joinColumns = @JoinColumn(name="course_id"),
+    inverseJoinColumns = @JoinColumn(name="student_id"))
+    private List<Student> students;
+```
+we need to update the students class:
+```agsl
+@ManyToMany(fetch = FetchType.LAZY,cascade = {CascadeType.DETACH,CascadeType.MERGE,CascadeType.PERSIST,CascadeType.REFRESH})
+    @JoinTable(name="course_student",
+            joinColumns = @JoinColumn(name="student_id"),
+            inverseJoinColumns = @JoinColumn(name="course_id"))
+    private List<Course> courses;
+```
+we need to add a new member to the runner class:
+```agsl
+Course course = new Course("javascript");
+		Student student1 = new Student("jjjj","sttt","jjlin@rbc.com");
+		Student student2 = new Student("qqq","hanland","whanland@rbc.com");
+		course.addStudent(student1);
+		course.addStudent(student2);
+        System.out.println("saving the course");
+		System.out.println("the students: " + course.getStudents());
+        System.out.println(course);
+		appDAO.save(course);
+        System.out.println("done!");
+```
+### find course and students, first find course
+we need to have a query by join fetch to find:
+```agsl
+TypedQuery<Course> query = entityManager.createQuery("select c from Course c " + "JOIN FETCH c.students " + "where c.id = :data" ,Course.class);
+        query.setParameter("data" ,theId);
+        // execute query
+        Course course = query.getSingleResult();
+        return course;
+```
+### first find student, then course
+just need to change the query by join fetch to find:
+```agsl
+TypedQuery<Student> query = entityManager.createQuery("select s from Student s " + "JOIN FETCH s.courses " + "where s.id = :data" ,Student.class);
+```
+### update the student
+```agsl
+@Override
+    @Transactional
+    public void update(Student student) {
+        entityManager.merge(student);
+    }
+```
+### update the students
+we can have a update method:
+```agsl
+ @Override
+    @Transactional
+    public void update(Student student) {
+        entityManager.merge(student);
+    }
+```
+then we can have a new method on the runner:
+```agsl
+int theId = 2;
+		Student student = appDAO.findStudentAndCoursesById(theId);
+		Course course1 = new Course("spring");
+		Course course2 = new Course("spring-boot");
+		student.addCourse(course1);
+		student.addCourse(course2);
+		System.out.println("updating student" + student);
+		System.out.println("associated course:" + student.getCourses());
+		appDAO.update(student);
+		System.out.println("done!");
+```
+notice that although the print statement will show `associated course:[Course{id=12, title='java'}, Course{id=0, title='spring'}, Course{id=0, title='spring-boot'}]`  
+but the database will generate the course id in the database.
 
 
 
