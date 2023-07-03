@@ -1372,6 +1372,21 @@ int theId = 2;
 ```
 notice that although the print statement will show `associated course:[Course{id=12, title='java'}, Course{id=0, title='spring'}, Course{id=0, title='spring-boot'}]`  
 but the database will generate the course id in the database.
+### only delete the course and student relationships
+we can just call the delete method, notice it will also delete the course and student relationships: `delete from course_student where course_id=?`
+### delete only student
+we add a new delete method:
+```agsl
+@Override
+    @Transactional
+    public void deleteStudentById(int theId) {
+        // retrieve student by id
+        Student tempStudent = entityManager.find(Student.class, theId);
+        // delete the student
+        entityManager.remove(tempStudent);
+    }
+```
+then we can just delete it.
 
 
 
