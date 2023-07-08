@@ -1404,7 +1404,35 @@ full aop support.
 ### before advice
 use case: logging and security, api management. We also have after return.
 ### AOP starter
-first we need to add Maven dependencies for AOP.
+first we need to add Maven dependencies for AOP.  
+we also need to aspect class:
+```agsl
+@Aspect
+@Component
+public class MyDemoLoggingAspect {
+    @Before("execution(public void add())")
+    public void beforeAddAccountAdvice() {
+        System.out.println("\n=====>>> Executing @Before advice on method");
+```
+notice that, we don't add any code in the main app, the aspect will run behind the scenes. So right now it actually run before the main app:
+```agsl
+=====>>> Executing @Before advice on method
+class lzc.com.example.AOPdemo.dao.AccountDAOlmpl: DOING MY DB WORK: ADDING AN ACCOUNT
+```
+## pointcut expression
+pointcut expression: a predicate expression for where advice is applied
+### match on method name
+using the wildcard `*`  
+`@Before("execution(public void add*())")`  
+it will match any method name start with add.  
+`   @Before("execution(public void addAccount())")` this will match addAccount method in any account.  
+`    @Before("execution(public void lzc.com.example.AOPdemo.dao.AccountDAO.addAccount())")` this will only match the AccountDAO.addAccount().  
+` @Before("execution(public void add*())")` this will match any method begin with *  
+`@Before("execution(* add*())")` this will match any method with any return type
+### parameter pattern wildcard
+() match a method with no arguments
+(*) match a method with one argument of any type
+(..) match a method with 0 or more arguments of any type
 
 
 
