@@ -1463,9 +1463,44 @@ the name of the pointcut is forDaoPackage, it is just like the variable name. fo
     System.out.println("\n=====>>> Performing API analytics");
 ```
 ### combine pointcut
-problem: apply multiple pointcut to single advice, execute an advice only if certain conditions meet.
-
-
+problem: apply multiple pointcut to single advice, execute an advice only if certain conditions meet.  
+we can use logical operators to combine pointcut:
+```agsl
+ @Pointcut("forDaoPackage() && !(getter() || setter())")
+    private void forDaoPackageNoGetterSetter() {}
+```
+then we can set the `@Before` only execute for not getter and setter:
+```agsl
+ @Before("forDaoPackageNoGetterSetter()")
+    public void beforeAddAccountAdvice() {
+        System.out.println("\n=====>>> Executing @Before advice on method");
+        
+        @Before("forDaoPackageNoGetterSetter()")
+    public void performApiAnalytics() {
+    System.out.println("\n=====>>> Performing API analytics");
+```
+so when you run getter and setter it will not run the pointcut.
+### control aspects order
+the order number goes from low to high, for example, order(1),order(8),order(12). also allow negative number: order(-22), order(-4), order(3).  
+If there are collisions, two order with the same number, it is undefined.  
+We can also create a new class for all pointcut expressions, adding a `@Aspect` is optional if there is only pointcut. we need to give the fully qualified name of the pointcut: <package> + <class>
+```agsl
+public class AopExpression {
+    @Pointcut("execution(* lzc.com.example.AOPdemo.dao.*.*(..))")
+    public void forDaoPackage() {}
+    // create pointcut for getter methods
+    @Pointcut("execution(* lzc.com.example.AOPdemo.dao.*.get*(..))")
+    public void getter() {}
+    // create pointcut for setter methods
+    @Pointcut("execution(* lzc.com.example.AOPdemo.dao.*.set*(..))")
+    public void setter() {}
+    // create pointcut: include package ... exclude getter/setter
+    @Pointcut("forDaoPackage() && !(getter() || setter())")
+    public void forDaoPackageNoGetterSetter() {}
+}
+```
+then we need to update the name for the `@Before`, `@Before("lzc.com.example.AOPdemo.aspect.AopExpression.forDaoPackageNoGetterSetter()")` the abs path.  
+now we can just add `@Order(1)`
 
 
 
