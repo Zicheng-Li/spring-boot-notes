@@ -1387,6 +1387,25 @@ we add a new delete method:
     }
 ```
 then we can just delete it.
+## Aspect-Oriented programming
+problem: code tangling and scattering  
+solved: aspect means cross-cutting concerns, aspect can be reused at multiple locations, it is a class.  
+AOP solution: use proxy design pattern.  
+### terminology
+aspect: module of code for cross-cutting concerns, advice: what action is taken and when it should be appiled.  
+join point: when to apply code during program execution, pointcut: a predicate expression for where advice should be applied. 
+### advice types
+before advice: run before the method, after advice: run after the method, after returning advice: run after the method(success execution), after throwing advice: run after method(if exception thrown), around advice: run before and after method.  
+### weaving 
+### spring AOP
+spring use this. use run-time weaving aspects, slower. simpler than AspectJ
+### AspectJ
+full aop support.
+### before advice
+use case: logging and security, api management. We also have after return.
+### AOP starter
+first we need to add Maven dependencies for AOP.
+
 
 
 
