@@ -1442,9 +1442,26 @@ private void demoTheBeforeAdvice(AccountDAO accountDAO, MembershipDAO membership
 		membershipDAO.addSillyMember();
 	}
 ```
-this `..` will match any number of parameters:
-`   @Before("execution(* add*(lzc.com.example.AOPdemo.Account, ..))")`
-
+this `..` will match any number of parameters after Account:
+`   @Before("execution(* add*(lzc.com.example.AOPdemo.Account, ..))")`  
+this will match any number of parameters:
+`@Before("execution(* add*(..))")`  
+the grand finale:
+` @Before("execution(* lzc.com.example.AOPdemo.dao.*.*(..))")`  
+**the first * is return type, then it is the package name, then it any class, then it any method with the 0 or more arguments of any type**  
+### pointcut declarations
+problem: we want to reuse the same pointcut.  
+we can have `@pointcut` to create a pointcut:
+```agsl
+@Pointcut("execution(* lzc.com.example.AOPdemo.dao.*.*(..))")
+    private void forDaoPackage() {}
+```
+the name of the pointcut is forDaoPackage, it is just like the variable name. for example, we can create reused the pointcut:
+```agsl
+@Before("forDaoPackage()")
+    public void performApiAnalytics() {
+    System.out.println("\n=====>>> Performing API analytics");
+```
 
 
 
