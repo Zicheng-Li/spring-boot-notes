@@ -1432,7 +1432,19 @@ it will match any method name start with add.
 ### parameter pattern wildcard
 () match a method with no arguments
 (*) match a method with one argument of any type
-(..) match a method with 0 or more arguments of any type
+(..) match a method with 0 or more arguments of any type  
+` @Before("execution(* add*(lzc.com.example.AOPdemo.Account))")` we can specify the path of the parameter in the add method.  
+we also need to create a new object in the main app:
+```agsl
+private void demoTheBeforeAdvice(AccountDAO accountDAO, MembershipDAO membershipDAO) {
+		Account myAccount = new Account();
+		accountDAO.addAccount(myAccount);
+		membershipDAO.addSillyMember();
+	}
+```
+this `..` will match any number of parameters:
+`   @Before("execution(* add*(lzc.com.example.AOPdemo.Account, ..))")`
+
 
 
 
