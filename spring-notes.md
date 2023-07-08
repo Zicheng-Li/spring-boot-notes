@@ -1462,6 +1462,8 @@ the name of the pointcut is forDaoPackage, it is just like the variable name. fo
     public void performApiAnalytics() {
     System.out.println("\n=====>>> Performing API analytics");
 ```
+### combine pointcut
+problem: apply multiple pointcut to single advice, execute an advice only if certain conditions meet.
 
 
 
