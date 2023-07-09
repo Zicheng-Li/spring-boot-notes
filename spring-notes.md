@@ -1611,6 +1611,37 @@ use case for this: log the exception or perform auditing, code to run regardless
     }
 ```
 this after will run no matter there is an exception or not. 
+## around advice--run before and after program
+use case: profiling code, instrumentation, pre-processing and pro-processing.  
+`ProceedingJoinPoint point` this is the handle to the target method. we need to have this to compute the runtime of our program.  
+`duration / 1000.0` converts milliseconds to seconds  
+we create a new class called `TrafficFortuneService`  
+this is the code to compute the runtime:
+```agsl
+@Around("execution(* lzc.com.example.AOPdemo.service.*.getFortune(..))")
+    public Object aroundFortune(ProceedingJoinPoint point) throws Throwable {
+        // print out method we are advising on
+        String method = point.getSignature().toShortString();
+        System.out.println("\n=====>>> Executing @Around on method: " + method);
+        // get begin timestamp
+        long begin = System.currentTimeMillis();
+        // now, let's execute the method
+        Object result = point.proceed();
+        // get end timestamp
+        long end = System.currentTimeMillis();
+        // compute duration and display it
+        long duration = end - begin;
+        System.out.println("\n=====> Duration: " + duration / 1000.0 + " seconds");
+        return result;
+    }
+```
+this is the ouput for this program:
+```agsl
+=====> Duration: 5.005 seconds
+ Main Program: Fortune is Expect heavy traffic this morning
+ Main Program: Finished
+```
+
 
 
 
