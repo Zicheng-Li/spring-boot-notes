@@ -1599,6 +1599,18 @@ this is the code for the after throwing:
         System.out.println("\n=====>>> The exception is: " + exc);
     }
 ```
+## after advice no matter successes or failed
+use case for this: log the exception or perform auditing, code to run regardless of the method outcome.  
+```agsl
+@After("execution(* lzc.com.example.AOPdemo.dao.AccountDAO.findAccounts(..))")
+    public void afterAdvice(JoinPoint joinPoint){
+        System.out.println("\n=====>>> Executing @After advice on method");
+        // print out which method we are advising on
+        String method = joinPoint.getSignature().toShortString();
+        System.out.println("\n=====>>> Executing @After (finally) advice on method: " + method);
+    }
+```
+this after will run no matter there is an exception or not. 
 
 
 
