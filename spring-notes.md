@@ -1641,8 +1641,51 @@ this is the ouput for this program:
  Main Program: Fortune is Expect heavy traffic this morning
  Main Program: Finished
 ```
-
-
+## around advice--handle exception
+the great thing is the around advice will handle the exception before the main app. the main app will never know the exception.  
+this is for the exception:
+```agsl
+@Override
+    public String getFortune(boolean tripWire) {
+        if(tripWire){
+            throw new RuntimeException("Major accident! Highway is closed!");
+        }
+        return getFortune();
+    }
+```
+the exception will never be thrown to the main app, because exceptions will be handled in the around advice.  
+we add this code to aspect:
+```agsl
+ try {
+            result = point.proceed();
+        }
+        catch (Exception e) {
+            // log the exception
+            System.out.println(e.getMessage());
+            result="Major accident! But no worries, your private AOP helicopter is on the way!";
+        }
+```
+this is the output:
+```agsl
+====>>> Executing @Around on method: TrafficFortuneServiceImpl.getFortune(..)
+Major accident! Highway is closed!
+=====> Duration: 0.001 seconds
+ Main Program: Fortune is Major accident! But no worries, your private AOP helicopter is on the way!
+```
+now we can also rethrow the exception.  
+we just need to change one line:
+```agsl
+try {
+            result = point.proceed();
+        }
+        catch (Exception e) {
+            // log the exception
+            System.out.println(e.getMessage());
+//            result="Major accident! But no worries, your private AOP helicopter is on the way!";
+            // rethrow exception
+            throw e;
+        }
+```
 
 
 
