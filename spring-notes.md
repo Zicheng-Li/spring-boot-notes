@@ -1573,6 +1573,32 @@ then we can call this function again, the result will be changed:
         System.out.println("Result: " + result);
 ```
 ## after throwing
+you can notify the DevOps teams via email or SMS.
+this is the code for the after throwing:
+```agsl
+private void demoTheAfterThrowingAdvice(AccountDAO accountDAO) {
+		// call the method to find the accounts
+		List<Account> accounts = null;
+		try {
+			// add a boolean flag to simulate an exception
+            boolean tripWire = true;
+            accounts = accountDAO.findAccounts(tripWire);
+        }
+```
+this is the code for the after throwing:
+```agsl
+@AfterThrowing(
+            pointcut = "execution(* lzc.com.example.AOPdemo.dao.AccountDAO.findAccounts(..))",
+            throwing = "exc"
+    )
+    public void afterThrowing(JoinPoint joinPoint, Throwable exc) {
+        // print out which method we are advising on
+        String method = joinPoint.getSignature().toShortString();
+        System.out.println("\n=====>>> Executing @AfterThrowing on method: " + method);
+        // log the exception
+        System.out.println("\n=====>>> The exception is: " + exc);
+    }
+```
 
 
 
