@@ -1,4 +1,5 @@
 # Notes:
+### use Lombok
 <!-- [links to demo](/Users/lizicheng/Desktop/java/spring/spring-boot-3-spring-6-hibernate-for-beginners-main/01-spring-boot-overview/03-actuator-demo) -->
 
 --
